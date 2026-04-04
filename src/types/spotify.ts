@@ -105,3 +105,254 @@ export interface SpotifyQueue {
   currently_playing: SpotifyTrack | SpotifyEpisode | null;
   queue: (SpotifyTrack | SpotifyEpisode)[];
 }
+
+// Artist (full, from GET /artists/{id})
+export interface SpotifyArtistFull {
+  id: string;
+  name: string;
+  uri: string;
+  genres: string[];
+}
+
+// Album item (used in artist albums listing and search results)
+export interface SpotifyAlbumItem {
+  id: string;
+  name: string;
+  uri: string;
+  album_type: string;
+  release_date: string;
+  total_tracks: number;
+  artists: SpotifyArtistSimple[];
+  images: SpotifyImage[];
+}
+
+// Paginated artist albums response
+export interface SpotifyArtistAlbumsResponse {
+  items: SpotifyAlbumItem[];
+  total: number;
+  limit: number;
+  offset: number;
+}
+
+// Simplified track in album tracks listing
+export interface SpotifyTrackSimple {
+  id: string;
+  name: string;
+  uri: string;
+  duration_ms: number;
+  explicit: boolean;
+  track_number: number;
+  artists: SpotifyArtistSimple[];
+}
+
+// Full album (GET /albums/{id})
+export interface SpotifyAlbumFull {
+  id: string;
+  name: string;
+  uri: string;
+  album_type: string;
+  release_date: string;
+  total_tracks: number;
+  artists: SpotifyArtistSimple[];
+  images: SpotifyImage[];
+  tracks: {
+    items: SpotifyTrackSimple[];
+    total: number;
+  };
+}
+
+// Audio features (GET /audio-features/{id})
+export interface AudioFeatures {
+  id: string;
+  acousticness: number;
+  danceability: number;
+  energy: number;
+  instrumentalness: number;
+  key: number;
+  liveness: number;
+  loudness: number;
+  mode: number;
+  speechiness: number;
+  tempo: number;
+  time_signature: number;
+  valence: number;
+  duration_ms: number;
+}
+
+// Audio analysis types (GET /audio-analysis/{id})
+export interface AudioAnalysisTrack {
+  duration: number;
+  loudness: number;
+  tempo: number;
+  time_signature: number;
+  key: number;
+  mode: number;
+  end_of_fade_in: number;
+  start_of_fade_out: number;
+}
+
+export interface AudioAnalysisSection {
+  start: number;
+  duration: number;
+  tempo: number;
+  key: number;
+  mode: number;
+  loudness: number;
+  time_signature: number;
+}
+
+export interface AudioAnalysisInterval {
+  start: number;
+  duration: number;
+  confidence: number;
+}
+
+export interface AudioAnalysisSegment {
+  start: number;
+  duration: number;
+  confidence: number;
+  loudness_start: number;
+  loudness_max: number;
+  pitches: number[];
+  timbre: number[];
+}
+
+export interface AudioAnalysis {
+  track: AudioAnalysisTrack;
+  sections: AudioAnalysisSection[];
+  bars: AudioAnalysisInterval[];
+  beats: AudioAnalysisInterval[];
+  tatums: AudioAnalysisInterval[];
+  segments: AudioAnalysisSegment[];
+}
+
+// Simplified show for search results
+export interface SpotifyShowSimple {
+  id: string;
+  name: string;
+  uri: string;
+  description: string;
+  publisher: string;
+  total_episodes: number;
+}
+
+// Simplified episode for show's episode list and search
+export interface SpotifyEpisodeSimple {
+  id: string;
+  name: string;
+  uri: string;
+  duration_ms: number;
+  release_date: string;
+  explicit: boolean;
+  description: string;
+  show: SpotifyShowSimple;
+  resume_point?: {
+    fully_played: boolean;
+    resume_position_ms: number;
+  };
+}
+
+// Full show (GET /shows/{id})
+export interface SpotifyShowFull {
+  id: string;
+  name: string;
+  uri: string;
+  description: string;
+  publisher: string;
+  explicit: boolean;
+  total_episodes: number;
+  languages: string[];
+  media_type: string;
+  episodes?: {
+    items: SpotifyEpisodeSimple[];
+    total: number;
+  };
+}
+
+// Full episode (GET /episodes/{id})
+export interface SpotifyEpisodeFull {
+  id: string;
+  name: string;
+  uri: string;
+  duration_ms: number;
+  release_date: string;
+  explicit: boolean;
+  description: string;
+  languages: string[];
+  audio_preview_url: string | null;
+  resume_point?: {
+    fully_played: boolean;
+    resume_position_ms: number;
+  };
+  show: {
+    id: string;
+    name: string;
+    uri: string;
+  };
+}
+
+// Paged response wrapper
+export interface SpotifyPaged<T> {
+  items: T[];
+  total: number;
+  limit: number;
+  offset: number;
+  next: string | null;
+}
+
+// Recently played item
+export interface RecentlyPlayedItem {
+  track: SpotifyTrack;
+  played_at: string; // ISO 8601
+  context: { type: string; uri: string } | null;
+}
+
+export interface RecentlyPlayedResponse {
+  items: RecentlyPlayedItem[];
+  cursors: { before: string; after: string } | null;
+  next: string | null;
+}
+
+// Recommendations (GET /recommendations)
+export interface RecommendationsResponse {
+  seeds: Array<{
+    id: string;
+    type: string;
+    href: string;
+    initialPoolSize: number;
+    afterFilteringSize: number;
+    afterRelinkingSize: number;
+  }>;
+  tracks: SpotifyTrack[];
+}
+
+// Available genre seeds
+export interface AvailableGenreSeedsResponse {
+  genres: string[];
+}
+
+// Featured playlists
+export interface FeaturedPlaylistsResponse {
+  message: string;
+  playlists: SpotifyPaged<SpotifyPlaylistSimple>;
+}
+
+// Simplified playlist for search results
+export interface SpotifyPlaylistSimple {
+  id: string;
+  name: string;
+  uri: string;
+  description: string | null;
+  owner: { display_name: string | null; id: string };
+  tracks: { total: number };
+}
+
+// Search response (GET /search)
+export interface SearchResponse {
+  tracks?: { items: SpotifyTrack[]; total: number };
+  artists?: { items: SpotifyArtistFull[]; total: number };
+  albums?: { items: SpotifyAlbumItem[]; total: number };
+  playlists?: { items: SpotifyPlaylistSimple[]; total: number };
+  shows?: { items: SpotifyShowSimple[]; total: number };
+  episodes?: { items: SpotifyEpisodeSimple[]; total: number };
+}

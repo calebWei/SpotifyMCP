@@ -3,6 +3,9 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { runAuthFlow } from './auth.js';
 import { SpotifyClient } from './client.js';
 import { registerPlaybackTools } from './tools/playback.js';
+import { registerSearchTools } from './tools/search.js';
+import { registerCatalogTools } from './tools/catalog.js';
+import { registerPersonalizationTools } from './tools/personalization.js';
 
 async function startMcpServer(): Promise<void> {
   const server = new McpServer({
@@ -13,6 +16,9 @@ async function startMcpServer(): Promise<void> {
   const client = new SpotifyClient();
 
   registerPlaybackTools(server, client);
+  registerSearchTools(server, client);
+  registerCatalogTools(server, client);
+  registerPersonalizationTools(server, client);
 
   const transport = new StdioServerTransport();
   await server.connect(transport);
