@@ -2,7 +2,7 @@
 
 An MCP server that wraps the Spotify Web API, letting AI assistants (like Claude) create and manage playlists, search for music, control playback, and get personalized recommendations.
 
-## Setup
+## Quick setup (no repo required)
 
 ### 1. Create a Spotify app
 
@@ -13,35 +13,15 @@ An MCP server that wraps the Spotify Web API, letting AI assistants (like Claude
    ```
 3. Save. Copy your **Client ID**.
 
-### 2. Configure your environment
-
-Copy `.env.example` to `.env` and fill in your Client ID:
+### 2. Authenticate
 
 ```bash
-cp .env.example .env
-```
-
-```env
-SPOTIFY_CLIENT_ID=your_client_id_here
-SPOTIFY_REDIRECT_URI=http://127.0.0.1:8888/callback
-```
-
-### 3. Install dependencies and build
-
-```bash
-npm install
-npm run build
-```
-
-### 4. Authenticate with Spotify
-
-```bash
-npm run auth
+SPOTIFY_CLIENT_ID=your_client_id_here npx spotify-mcp auth
 ```
 
 This opens your browser to the Spotify authorization page. After you approve, tokens are saved to `~/.spotify-mcp/tokens.json`. You only need to do this once — the server refreshes tokens automatically.
 
-### 5. Configure Claude Desktop
+### 3. Configure Claude Desktop
 
 Add the following to your `claude_desktop_config.json`:
 
@@ -52,27 +32,11 @@ Add the following to your `claude_desktop_config.json`:
 {
   "mcpServers": {
     "spotify": {
-      "command": "node",
-      "args": [
-        "--env-file=/absolute/path/to/SpotifyMCP/.env",
-        "/absolute/path/to/SpotifyMCP/dist/index.js"
-      ]
-    }
-  }
-}
-```
-
-Replace `/absolute/path/to/SpotifyMCP` with the actual path to this repo. For example, on Windows:
-
-```json
-{
-  "mcpServers": {
-    "spotify": {
-      "command": "node",
-      "args": [
-        "--env-file=D:\\_repos\\SpotifyMCP\\.env",
-        "D:\\_repos\\SpotifyMCP\\dist\\index.js"
-      ]
+      "command": "npx",
+      "args": ["-y", "spotify-mcp"],
+      "env": {
+        "SPOTIFY_CLIENT_ID": "your_client_id_here"
+      }
     }
   }
 }
@@ -93,7 +57,16 @@ Once connected, you can ask Claude things like:
 ## Development
 
 ```bash
-npm run dev       # run from source with tsx (no build needed)
-npm run auth      # re-authenticate with Spotify
-npm run build     # compile TypeScript to dist/
+git clone https://github.com/calebWei/SpotifyMCP.git
+cd SpotifyMCP
+npm install
+npm run build
+
+# Authenticate
+npm run auth   # requires SPOTIFY_CLIENT_ID in .env
+
+# Run from source
+npm run dev
 ```
+
+Copy `.env.example` to `.env` and fill in your Client ID before running any dev commands.
