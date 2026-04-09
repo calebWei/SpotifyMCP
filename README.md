@@ -71,6 +71,10 @@ Once connected, you can ask Claude things like:
 - "What artists have I been listening to most lately?"
 - "Make me a playlist with a late night driving vibe"
 
+## Disclaimer
+
+This is a personal project, not affiliated with or endorsed by Spotify. It is provided as-is with no warranties or guarantees of any kind. Use it responsibly and in accordance with the [Spotify Developer Terms of Service](https://developer.spotify.com/terms). The author is not responsible for any misuse or consequences arising from use of this software.
+
 ## Development
 
 ```bash
