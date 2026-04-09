@@ -17,9 +17,7 @@ Each user needs their own Spotify app to get a Client ID — this is how Spotify
 
 ### 2. Authenticate
 
-Run this once to log in to your Spotify account. It opens a browser window, and after you approve, saves tokens to `~/.spotify-mcp/tokens.json`. The server refreshes them automatically — you won't need to do this again.
-
-Replace `your_client_id_here` with the Client ID from step 1.
+Run the command below once to log in to your Spotify account. Replace `your_client_id_here` with the Client ID from step 1. It opens a browser window, and after you approve, saves tokens to `~/.spotify-mcp/tokens.json`. The server refreshes them automatically — you won't need to do this again.
 
 **macOS / Linux:**
 ```bash
