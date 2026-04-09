@@ -15,18 +15,30 @@ An MCP server that wraps the Spotify Web API, letting AI assistants (like Claude
 
 ### 2. Authenticate
 
+Run once to authorize your Spotify account. Tokens are saved to `~/.spotify-mcp/tokens.json` and refreshed automatically from then on.
+
+**macOS / Linux:**
 ```bash
 SPOTIFY_CLIENT_ID=your_client_id_here npx spotify-mcp auth
 ```
 
-This opens your browser to the Spotify authorization page. After you approve, tokens are saved to `~/.spotify-mcp/tokens.json`. You only need to do this once — the server refreshes tokens automatically.
+**Windows (Command Prompt):**
+```cmd
+set SPOTIFY_CLIENT_ID=your_client_id_here && npx spotify-mcp auth
+```
+
+**Windows (PowerShell):**
+```powershell
+$env:SPOTIFY_CLIENT_ID="your_client_id_here"; npx spotify-mcp auth
+```
 
 ### 3. Configure Claude Desktop
 
 Add the following to your `claude_desktop_config.json`:
 
-- **Windows:** `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude\claude_desktop_config.json`
-- **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+**macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+
+**Windows:** Open Claude Desktop → Settings → Developer → Edit Config
 
 ```json
 {
@@ -61,12 +73,11 @@ git clone https://github.com/calebWei/SpotifyMCP.git
 cd SpotifyMCP
 npm install
 npm run build
-
-# Authenticate
-npm run auth   # requires SPOTIFY_CLIENT_ID in .env
-
-# Run from source
-npm run dev
 ```
 
-Copy `.env.example` to `.env` and fill in your Client ID before running any dev commands.
+Copy `.env.example` to `.env` and fill in your Client ID, then:
+
+```bash
+npm run auth   # authenticate with Spotify
+npm run dev    # run from source (no build needed)
+```
