@@ -2,12 +2,14 @@
 
 An MCP server that wraps the Spotify Web API, letting AI assistants (like Claude) create and manage playlists, search for music, control playback, and get personalized recommendations.
 
-## Quick setup (no repo required)
+## Quick setup
 
 ### 1. Create a Spotify app
 
+Each user needs their own Spotify app to get a Client ID — this is how Spotify identifies which app is making API requests.
+
 1. Go to the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard) and create a new app.
-2. In the app settings, add the following **Redirect URI** exactly:
+2. In the app settings, add the following **Redirect URI** exactly (Spotify will reject the login if this doesn't match):
    ```
    http://127.0.0.1:8888/callback
    ```
@@ -15,37 +17,40 @@ An MCP server that wraps the Spotify Web API, letting AI assistants (like Claude
 
 ### 2. Authenticate
 
-Run once to authorize your Spotify account. Tokens are saved to `~/.spotify-mcp/tokens.json` and refreshed automatically from then on.
+Run this once to log in to your Spotify account. It opens a browser window, and after you approve, saves tokens to `~/.spotify-mcp/tokens.json`. The server refreshes them automatically — you won't need to do this again.
+
+Replace `your_client_id_here` with the Client ID from step 1.
 
 **macOS / Linux:**
 ```bash
-SPOTIFY_CLIENT_ID=your_client_id_here npx spotify-mcp auth
+SPOTIFY_CLIENT_ID=your_client_id_here npx spotify-mcp@latest auth
 ```
 
 **Windows (Command Prompt):**
 ```cmd
-set SPOTIFY_CLIENT_ID=your_client_id_here && npx spotify-mcp auth
+set SPOTIFY_CLIENT_ID=your_client_id_here && npx spotify-mcp@latest auth
 ```
 
 **Windows (PowerShell):**
 ```powershell
-$env:SPOTIFY_CLIENT_ID="your_client_id_here"; npx spotify-mcp auth
+$env:SPOTIFY_CLIENT_ID="your_client_id_here"; npx spotify-mcp@latest auth
 ```
 
 ### 3. Configure Claude Desktop
 
-Add the following to your `claude_desktop_config.json`:
+Open your `claude_desktop_config.json`:
 
-**macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Windows:** Open Claude Desktop → Settings → Developer → Edit Config
 
-**Windows:** Open Claude Desktop → Settings → Developer → Edit Config
+Add the `mcpServers` block (replace `your_client_id_here` with your Client ID):
 
 ```json
 {
   "mcpServers": {
     "spotify": {
       "command": "npx",
-      "args": ["-y", "spotify-mcp"],
+      "args": ["-y", "spotify-mcp@latest"],
       "env": {
         "SPOTIFY_CLIENT_ID": "your_client_id_here"
       }
