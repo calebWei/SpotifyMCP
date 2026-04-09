@@ -356,3 +356,56 @@ export interface SearchResponse {
   shows?: { items: SpotifyShowSimple[]; total: number };
   episodes?: { items: SpotifyEpisodeSimple[]; total: number };
 }
+
+// Saved library items
+export interface SavedTrackItem {
+  added_at: string;
+  track: SpotifyTrack;
+}
+
+export interface SavedAlbumItem {
+  added_at: string;
+  album: SpotifyAlbumFull;
+}
+
+export interface SavedShowItem {
+  added_at: string;
+  show: SpotifyShowSimple;
+}
+
+export interface SavedEpisodeItem {
+  added_at: string;
+  episode: SpotifyEpisodeFull;
+}
+
+// User profile (GET /me)
+export interface UserProfile {
+  id: string;
+  display_name: string | null;
+  uri: string;
+  external_urls: { spotify: string };
+}
+
+// Playlist item (from GET /playlists/{id}/items)
+export interface PlaylistItemObject {
+  added_at: string;
+  track: SpotifyTrack | SpotifyEpisode | null;
+}
+
+export interface PlaylistItemsResponse {
+  items: PlaylistItemObject[];
+  total: number;
+  limit: number;
+  offset: number;
+  next: string | null;
+}
+
+// Followed artists (cursor-based pagination, GET /me/following?type=artist)
+export interface FollowedArtistsResponse {
+  artists: {
+    items: SpotifyArtistFull[];
+    cursors: { after: string } | null;
+    next: string | null;
+    total: number;
+  };
+}

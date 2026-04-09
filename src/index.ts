@@ -6,6 +6,11 @@ import { registerPlaybackTools } from './tools/playback.js';
 import { registerSearchTools } from './tools/search.js';
 import { registerCatalogTools } from './tools/catalog.js';
 import { registerPersonalizationTools } from './tools/personalization.js';
+import { registerLibraryTools } from './tools/library.js';
+import { registerFollowingTools } from './tools/following.js';
+import { registerPlaylistTools } from './tools/playlists.js';
+import { registerResources } from './resources/index.js';
+import { registerPrompts } from './prompts/index.js';
 
 async function startMcpServer(): Promise<void> {
   const server = new McpServer({
@@ -19,6 +24,11 @@ async function startMcpServer(): Promise<void> {
   registerSearchTools(server, client);
   registerCatalogTools(server, client);
   registerPersonalizationTools(server, client);
+  registerLibraryTools(server, client);
+  registerFollowingTools(server, client);
+  registerPlaylistTools(server, client);
+  registerResources(server, client);
+  registerPrompts(server);
 
   const transport = new StdioServerTransport();
   await server.connect(transport);
